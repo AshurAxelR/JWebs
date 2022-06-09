@@ -18,7 +18,7 @@ public class MarkdownWebServer extends StaticWebServer {
 	public static final String localPath = loadStringDef(new File("html/mdocs.path"), "html");
 	
 	public MarkdownWebServer(String context, String localPath) {
-		super(context, localPath);
+		super(context, localPath, true);
 	}
 
 	public void sendMarkdown(HttpExchange http, File f) throws IOException {

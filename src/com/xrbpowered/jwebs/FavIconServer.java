@@ -1,7 +1,5 @@
 package com.xrbpowered.jwebs;
 
-import static com.xrbpowered.jwebs.FileUtils.loadBytes;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,7 +24,7 @@ public class FavIconServer extends WebServerBase {
 	@Override
 	public void handleGet(HttpExchange http, URI uri) throws IOException {
 		if(uri.getPath().isEmpty() && local.isFile())
-			respond(http, contentType, loadBytes(local));
+			StaticWebServer.sendFileCached(http, local, contentType, true);
 		else
 			sendError(http, HTTP_NOT_FOUND);
 	}

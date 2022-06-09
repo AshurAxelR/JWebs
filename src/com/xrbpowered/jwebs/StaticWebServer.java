@@ -1,22 +1,38 @@
 package com.xrbpowered.jwebs;
 
+import static com.xrbpowered.jwebs.FileUtils.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
 import com.sun.net.httpserver.HttpExchange;
 
-import static com.xrbpowered.jwebs.FileUtils.*;
-
 public class StaticWebServer extends WebServerBase {
 
 	public File local;
+	public boolean supportCache;
 	
-	public StaticWebServer(String context, String localPath) {
+	public StaticWebServer(String context, String localPath, boolean supportCache) {
 		super(context);
 		local = new File(localPath);
+		this.supportCache = supportCache;
 	}
 
+	public StaticWebServer(String context, String localPath) {
+		this(context, localPath, true);
+	}
+
+	public static void sendFileCached(HttpExchange http, File f, String contentType, boolean supportCache) throws IOException {
+		long time = f.lastModified();
+		if(supportCache)
+			http.getResponseHeaders().set("Last-Modified", HttpTime.format(time));
+		if(!supportCache || isNewer(http, time))
+			respond(http, contentType, loadBytes(f));
+		else
+			respondEmpty(http, HTTP_NOT_MODIFIED, contentType);
+	}
+	
 	public void sendFile(HttpExchange http, File f, String ext) throws IOException {
 		if(ext.equals("css") && http.getRequestHeaders().getFirst("User-agent").contains("Firefox")) {
 			try {
@@ -25,7 +41,7 @@ public class StaticWebServer extends WebServerBase {
 			}
 		}
 
-		respond(http, ContentType.get(ext), loadBytes(f));
+		sendFileCached(http, f, ContentType.get(ext), supportCache);
 	}
 	
 	@Override

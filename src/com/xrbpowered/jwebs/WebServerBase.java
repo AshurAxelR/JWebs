@@ -1,14 +1,15 @@
 package com.xrbpowered.jwebs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -23,8 +24,7 @@ public abstract class WebServerBase implements HttpHandler, HttpConstants {
 	}
 	
 	public static void respond(HttpExchange http, int code, String contentType, byte[] response) throws IOException {
-		Headers headers = http.getResponseHeaders();
-		headers.set("Content-Type", contentType);
+		http.getResponseHeaders().set("Content-Type", contentType);
 		if(response!=null) {
 			http.sendResponseHeaders(code, response.length);
 			if(!http.getRequestMethod().equals(HEAD)) {
@@ -35,8 +35,12 @@ public abstract class WebServerBase implements HttpHandler, HttpConstants {
 			}
 		}
 		else {
-			http.sendResponseHeaders(code, 0);
+			http.sendResponseHeaders(code, (code==HTTP_NOT_MODIFIED) ? -1 : 0);
 		}
+	}
+
+	public static void respondEmpty(HttpExchange http, int code, String contentType) throws IOException {
+		respond(http, code, contentType, (byte[])null);
 	}
 
 	public static void respond(HttpExchange http, int code, String contentType, String response) throws IOException {
@@ -60,6 +64,27 @@ public abstract class WebServerBase implements HttpHandler, HttpConstants {
 
 	public static void sendError(HttpExchange http, int code) throws IOException {
 		sendError(http, code, null);
+	}
+
+	public static boolean isNewer(long reqTime, long time) {
+		return (time/1000L)>(reqTime/1000L);
+	}
+	
+	public static boolean isNewer(HttpExchange http, long time) {
+		String req = http.getRequestHeaders().getFirst("If-Modified-Since");
+		if(req==null)
+			return true;
+		else {
+			try {
+				return isNewer(HttpTime.parse(req), time);
+			} catch (ParseException e) {
+				return true;
+			}
+		}
+	}
+	
+	public static boolean isNewer(HttpExchange http, File f) {
+		return isNewer(http, f.lastModified());
 	}
 
 	public abstract void handleGet(HttpExchange http, URI uri) throws IOException;
