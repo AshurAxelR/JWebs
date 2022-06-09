@@ -18,8 +18,7 @@ public class StaticWebServer extends WebServerBase {
 	}
 
 	public void sendFile(HttpExchange http, File f, String ext) throws IOException {
-		if(http.getRequestHeaders().getFirst("User-agent").contains("Firefox")
-				&& ext.equals("css")) {
+		if(ext.equals("css") && http.getRequestHeaders().getFirst("User-agent").contains("Firefox")) {
 			try {
 				Thread.sleep(15);  // FIXME why FF blinks without this?
 			} catch (InterruptedException e) {
@@ -36,7 +35,7 @@ public class StaticWebServer extends WebServerBase {
 		if(f.isFile())
 			sendFile(http, f, fileExt(path));
 		else
-			sendError(http, HTTP_NOT_FOUND, "Not found");
+			sendError(http, HTTP_NOT_FOUND);
 	}
 
 }

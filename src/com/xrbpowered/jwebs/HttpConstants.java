@@ -17,4 +17,25 @@ public interface HttpConstants {
 	public static final String HEAD = "HEAD";
 	public static final String POST = "POST";
 	
+	public static String errorName(int code) {
+		switch(code) {
+			case HTTP_BAD_REQUEST:
+				return "Bad Request";
+			case HTTP_UNAUTHORIZED:
+				return "Unauthorized";
+			case HTTP_FORBIDDEN:
+				return "Forbidden";
+			case HTTP_NOT_FOUND:
+				return "Not Found";
+			case HTTP_SEVER_ERROR:
+				return "Internal Server Error";
+			case HTTP_NOT_IMPLEMENTED:
+				return "Not Implemented";
+			case HTTP_SERVICE_UNAVAILABLE:
+				return "Service Unavailable";
+			default:
+				return "";
+		}
+	}
+	
 }

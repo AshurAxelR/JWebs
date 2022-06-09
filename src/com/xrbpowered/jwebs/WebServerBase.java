@@ -52,10 +52,14 @@ public abstract class WebServerBase implements HttpHandler, HttpConstants {
 	}
 
 	public static void sendError(HttpExchange http, int code, String message) throws IOException {
-		String s = String.format("Error %d", code);
+		String s = String.format("ERROR %d %s\n", code, HttpConstants.errorName(code));
 		if(message!=null && !message.isEmpty())
-			s += ": "+message;
+			s += message;
 		respond(http, code, ContentType.text, s);
+	}
+
+	public static void sendError(HttpExchange http, int code) throws IOException {
+		sendError(http, code, null);
 	}
 
 	public abstract void handleGet(HttpExchange http, URI uri) throws IOException;
@@ -69,7 +73,7 @@ public abstract class WebServerBase implements HttpHandler, HttpConstants {
 				}
 				catch (Exception e) {
 					e.printStackTrace();
-					sendError(http, HTTP_SEVER_ERROR, "Internal server error");
+					sendError(http, HTTP_SEVER_ERROR);
 				}
 				break;
 			default:

@@ -28,7 +28,7 @@ public class FavIconServer extends WebServerBase {
 		if(uri.getPath().isEmpty() && local.isFile())
 			respond(http, contentType, loadBytes(local));
 		else
-			sendError(http, HTTP_NOT_FOUND, "No favicon");
+			sendError(http, HTTP_NOT_FOUND);
 	}
 
 }
