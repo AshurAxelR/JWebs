@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.xrbpowered.jwebs.ContentType;
 import com.xrbpowered.jwebs.Output;
 import com.xrbpowered.jwebs.StaticWebServer;
+import com.xrbpowered.jwebs.StringLibrary;
 
 import static com.xrbpowered.jwebs.FileUtils.*;
 
@@ -16,6 +17,7 @@ public class MarkdownWebServer extends StaticWebServer {
 	public static final int port = 3377;
 	public static final int threads = 10;
 	public static final String localPath = loadStringDef(new File("html/mdocs.path"), "html");
+	public static final StringLibrary str = StringLibrary.load(getResource("com/xrbpowered/jwebs/examples/example.str"));
 	
 	public MarkdownWebServer(String context, String localPath) {
 		super(context, localPath, true);
@@ -27,14 +29,7 @@ public class MarkdownWebServer extends StaticWebServer {
 		String body = parsedown.text(md);
 		
 		Output out = Output.start();
-		out.println("<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\" />");
-		out.println("<meta name=\"viewport\" content=\"width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0\" />");
-		out.printf("<title>%s</title>\n", parsedown.title);
-		out.println("<link rel=\"stylesheet\" href=\"md_jlight.css\" />");
-		out.println("</head>\n<body class=\"bg\"><div class=\"body\"><div class=\"page\">");
-		out.println(body);
-		out.println("</div></div></body>\n</html>");
-		
+		out.printf(str.get("page"), parsedown.title, body);
 		respond(http, ContentType.html, out.finish());
 	}
 	
