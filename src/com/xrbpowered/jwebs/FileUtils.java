@@ -32,7 +32,15 @@ public interface FileUtils {
 	public static InputStream getResource(String path) {
 		return ClassLoader.getSystemResourceAsStream(path);
 	}
-	
+
+	public static InputStream getResource(String pkg, String name) {
+		return getResource(String.format("%s/%s", pkg.replace('.', '/'), name));
+	}
+
+	public static InputStream getResource(Class<?> cls, String name) {
+		return getResource(cls.getPackage().getName(), name);
+	}
+
 	public static String loadStringDef(File f, String def) {
 		try {
 			return loadString(f);

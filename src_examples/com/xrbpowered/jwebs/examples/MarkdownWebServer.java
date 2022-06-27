@@ -17,7 +17,7 @@ public class MarkdownWebServer extends StaticWebServer {
 	public static final int port = 3377;
 	public static final int threads = 10;
 	public static final String localPath = loadStringDef(new File("html/mdocs.path"), "html");
-	public static final StringLibrary str = StringLibrary.load(getResource("com/xrbpowered/jwebs/examples/example.str"));
+	public static final StringLibrary str = StringLibrary.load(getResource(MarkdownWebServer.class, "example.str"));
 	
 	public MarkdownWebServer(String context, String localPath) {
 		super(context, localPath, true);

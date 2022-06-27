@@ -43,8 +43,8 @@ public class StringLibrary {
 			key = key.replaceFirst("\\[.*\\]", "").trim();
 			if(key.matches("[A-Za-z0-9_\\.]+\\\\?")) {
 				if(key.endsWith("\\")) {
-					value = value.replaceAll("\\\\n", "\n").replaceAll("\\\\t", "\t")
-							.replaceAll("\\\\s", " ").replaceAll("\\\\r", "\r").replaceAll("\\\\\\\\", "\\");
+					value = value.replace("\\n", "\n").replace("\\t", "\t")
+							.replace("\\s", " ").replace("\\r", "\r").replace("\\\\", "\\");
 					key = key.substring(0, key.length()-1);
 				}
 				map.put(key, value);
