@@ -21,15 +21,12 @@ public class StringLibrary {
 			if(line.endsWith("$$")) {
 				key = line.substring(0, line.length()-2);
 				StringBuilder sb = new StringBuilder();
-				boolean first = true;
 				while(in.hasNextLine()) {
 					String s = in.nextLine();
 					if(s.equals("$$"))
 						break;
-					if(!first)
-						sb.append("\n");
-					first = false;
 					sb.append(s);
+					sb.append("\n");
 				}
 				value = sb.toString();
 			}
@@ -50,7 +47,7 @@ public class StringLibrary {
 				map.put(key, value);
 			}
 			else
-				throw new IOException("Bad string id format");
+				throw new IOException("Bad key format");
 		}
 		in.close();
 	}

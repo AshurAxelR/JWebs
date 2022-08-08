@@ -18,9 +18,13 @@ public class MarkdownWebServer extends StaticWebServer {
 	public static final int threads = 10;
 	public static final String localPath = loadStringDef(new File("html/mdocs.path"), "html");
 	public static final StringLibrary str = StringLibrary.load(getResource(MarkdownWebServer.class, "example.str"));
+	public static final String defaultCss = "md_jlight.css";
 	
-	public MarkdownWebServer(String context, String localPath) {
+	public String css;
+	
+	public MarkdownWebServer(String context, String localPath, String css) {
 		super(context, localPath, true);
+		this.css = css;
 	}
 
 	public void sendMarkdown(HttpExchange http, File f) throws IOException {
@@ -29,7 +33,7 @@ public class MarkdownWebServer extends StaticWebServer {
 		String body = parsedown.text(md);
 		
 		Output out = Output.start();
-		out.printf(str.get("page"), parsedown.title, body);
+		out.printf(str.get("page"), parsedown.title, css, body);
 		respond(http, ContentType.html, out.finish());
 	}
 	
@@ -61,7 +65,7 @@ public class MarkdownWebServer extends StaticWebServer {
 	}
 	
 	public static void main(String[] args) {
-		startServer("localhost", port, threads, new MarkdownWebServer("/", localPath));
+		startServer("localhost", port, threads, new MarkdownWebServer("/", localPath, defaultCss));
 		System.out.println("MarkdownWebServer started on port "+port);
 	}
 }
