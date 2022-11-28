@@ -14,11 +14,12 @@ import static com.xrbpowered.jwebs.FileUtils.*;
 
 public class MarkdownWebServer extends StaticWebServer {
 
-	public static final int port = 3377;
-	public static final int threads = 10;
-	public static final String localPath = loadStringDef(new File("html/mdocs.path"), "html");
-	public static final StringLibrary str = StringLibrary.load(getResource(MarkdownWebServer.class, "example.str"));
-	public static final String defaultCss = "md_jlight.css";
+	public static StringLibrary str = StringLibrary.load(getResource(MarkdownWebServer.class, "example.str"));
+	
+	public static int port = 3377;
+	public static int threads = 10;
+	public static String localPath = "html";
+	public static String defaultCss = "/md_ghlike.css";
 	
 	public String css;
 	
@@ -53,7 +54,7 @@ public class MarkdownWebServer extends StaticWebServer {
 		
 		String ext = fileExt(path);
 		File f = new File(local, path);
-		if((ext.equals("html") || ext.equals("html")) && !f.isFile()) {
+		if((ext.equals("htm") || ext.equals("html")) && !f.isFile()) {
 			path = path.substring(0, path.length()-ext.length())+"md";
 			f = new File(local, path);
 			if(f.isFile()) {
@@ -65,6 +66,13 @@ public class MarkdownWebServer extends StaticWebServer {
 	}
 	
 	public static void main(String[] args) {
+		if(args.length>0)
+			str.putAll(StringLibrary.load(new File(args[0])));
+		port = str.getInt("port", port);
+		threads = str.getInt("threads", threads);
+		localPath = str.get("localPath", localPath);
+		defaultCss = str.get("css", defaultCss);
+		
 		startServer("localhost", port, threads, new MarkdownWebServer("/", localPath, defaultCss));
 		System.out.println("MarkdownWebServer started on port "+port);
 	}
