@@ -1,4 +1,4 @@
-package com.xrbpowered.jwebs;
+package com.xrbpowered.jwebs.core;
 
 import java.io.DataInputStream;
 import java.io.File;

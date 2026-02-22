@@ -1,4 +1,4 @@
-package com.xrbpowered.jwebs;
+package com.xrbpowered.jwebs.core;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

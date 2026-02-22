@@ -1,6 +1,6 @@
-package com.xrbpowered.jwebs;
+package com.xrbpowered.jwebs.core;
 
-import static com.xrbpowered.jwebs.FileUtils.*;
+import static com.xrbpowered.jwebs.core.FileUtils.*;
 
 import java.io.File;
 import java.io.IOException;

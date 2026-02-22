@@ -1,4 +1,4 @@
-package com.xrbpowered.jwebs;
+package com.xrbpowered.jwebs.core;
 
 public interface HttpConstants {
 
