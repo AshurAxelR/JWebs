@@ -17,7 +17,7 @@ public class MarkdownWebServer extends StaticWebServer {
 	public static StringLibrary str = StringLibrary.load(getResource(MarkdownWebServer.class, "markdown.str"));
 
 	public static int port = 3377;
-	public static int threads = 10;
+	public static int threads = 3;
 	public static String localPath = "html";
 	public static String defaultCss = "/md_ghlike.css";
 
@@ -73,7 +73,7 @@ public class MarkdownWebServer extends StaticWebServer {
 		localPath = str.get("localPath", localPath);
 		defaultCss = str.get("css", defaultCss);
 
-		startServer("localhost", port, threads, new MarkdownWebServer("/", localPath, defaultCss));
-		System.out.println("MarkdownWebServer started on port " + port);
+		if(startServer("localhost", port, threads, new MarkdownWebServer("/", localPath, defaultCss)) != null)
+			System.out.println("MarkdownWebServer started on port " + port);
 	}
 }

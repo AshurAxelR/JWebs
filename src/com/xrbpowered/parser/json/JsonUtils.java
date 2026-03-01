@@ -46,4 +46,28 @@ public class JsonUtils {
 		return (b == null) ? def : b;
 	}
 
+	public static double number(Map<String, Object> json, String key, double def) {
+		Object v = json.get(key);
+		if(v == null)
+			return def;
+		else if(v instanceof Double n)
+			return n;
+		else if(v instanceof Float n)
+			return n;
+		else if(v instanceof Long n)
+			return n;
+		else if(v instanceof Integer n)
+			return n;
+		else if(v instanceof String s) {
+			try {
+				return Double.parseDouble(s);
+			}
+			catch(NumberFormatException e) {
+				return def;
+			}
+		}
+		else
+			return def;
+	}
+
 }
